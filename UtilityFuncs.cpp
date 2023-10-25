@@ -85,7 +85,7 @@ void Log(LPCWSTR str, bool bForceODS)
 
 	HANDLE oh = GetStdHandle( STD_OUTPUT_HANDLE );
 	DWORD ignored;
-	WriteConsole(oh, (LPCWSTR)s, wcslen(s), &ignored, NULL);
+	WriteConsole(oh, (LPCWSTR)s, ::DWORD(wcslen(s)), &ignored, NULL);
 
 	if(gbODS || bForceODS)
 		OutputDebugString(s);
@@ -99,15 +99,15 @@ void Log(LPCWSTR str, bool bForceODS)
 			ULARGE_INTEGER ui = {0};
 			ui.LowPart = GetFileSize(hf, &ui.HighPart);
 			if(0 == ui.QuadPart)
-				WriteFile(hf, &UTF8_BOM, sizeof(UTF8_BOM), &ignored, 0);  
+				WriteFile(hf, &UTF8_BOM, sizeof(UTF8_BOM), &ignored, 0);
 			SetFilePointer(hf, 0, 0, FILE_END);
-			
+
 			//now convert to UTF-8
-			DWORD len = WideCharToMultiByte(CP_UTF8, 0, s, wcslen(s), NULL, 0, NULL, NULL);
+			DWORD len = WideCharToMultiByte(CP_UTF8, 0, s, (int)wcslen(s), NULL, 0, NULL, NULL);
 			if(0 != len)
 			{
 				char* pBuff = new char[len + 5];
-				WideCharToMultiByte(CP_UTF8, 0, s, wcslen(s), pBuff, len, NULL, NULL);
+				WideCharToMultiByte(CP_UTF8, 0, s, (int)wcslen(s), pBuff, len, NULL, NULL);
 				pBuff[len] = '\0';
 				WriteFile(hf, pBuff, len, &ignored, 0);
 				delete [] pBuff;
@@ -422,7 +422,7 @@ bool ReadTextFile(LPCWSTR fileName, CString& content)
 		pOrig = NULL;
 		pBuff = NULL;
 		CloseHandle(hf);
-		
+
 		return true;
 	}
 	else

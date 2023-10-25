@@ -90,6 +90,7 @@ ipch/
 *.psess
 *.vsp
 *.vspx
+/.vs
 
 # Guidance Automation Toolkit
 *.gpState
@@ -215,3 +216,6 @@ pip-log.txt
 .mr.developer.cfg
 .vs/PAExec/v15/Browse.VC.db
 .vs/PAExec/v15/Browse.VC.opendb
+
+#SU CBE
+/bincbe
