@@ -245,10 +245,10 @@ bool StartProcess(Settings& settings, HANDLE hCmdPipe)
 			Log(L"Failed to PrepForInteractiveProcess", true);
 
 		if(NULL == si.lpDesktop)
-			si.lpDesktop = L"WinSta0\\Default";
+			si.lpDesktop = LPWSTR(L"WinSta0\\Default");
 		if(settings.bShowUIOnWinLogon)
-			si.lpDesktop = L"winsta0\\Winlogon";
-		//Log(StrFormat(L"Using desktop: %s", si.lpDesktop), false);
+			si.lpDesktop = LPWSTR(L"winsta0\\Winlogon");
+		Log(StrFormat(L"Using desktop: %s", si.lpDesktop), false);
 		//http://blogs.msdn.com/b/winsdk/archive/2009/07/14/launching-an-interactive-process-from-windows-service-in-windows-vista-and-later.aspx
 		//indicates desktop names are case sensitive
 	}
@@ -454,14 +454,11 @@ bool StartProcess(Settings& settings, HANDLE hCmdPipe)
 CString GetTokenUserSID(HANDLE hToken)
 {
 	DWORD tmp = 0;
+
 	CString userName;
 	DWORD sidNameSize = 64;
 	std::vector<WCHAR> sidName;
 	sidName.resize(sidNameSize);
-
-	DWORD sidDomainSize = 64;
-	std::vector<WCHAR> sidDomain;
-	sidDomain.resize(sidNameSize);
 
 	DWORD userTokenSize = 1024;
 	std::vector<WCHAR> tokenUserBuf;
